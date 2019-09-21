@@ -15,7 +15,7 @@ public class ToolPlugin implements Plugin<Project> {
                 .getByType(AppExtension.class)
                 .registerTransform(new ToolTransform());
             project.afterEvaluate(p -> {
-                ToolProjectInfo projectInfo = new ToolProjectInfo(true);
+                ToolProjectInfo projectInfo = new ToolProjectInfo(false);
                 for (Project subProject : p.getRootProject().getSubprojects()) {
                     if (subProject.getPlugins().hasPlugin("com.android.application") ||
                         subProject.getPlugins().hasPlugin("com.android.library")) {

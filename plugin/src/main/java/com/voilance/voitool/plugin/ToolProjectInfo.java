@@ -11,11 +11,11 @@ public final class ToolProjectInfo implements IProjectInfo {
 
     @Override
     public String group() {
-        return mIsDebug ? "com.voilance.voitool" : "com.github.Voilance.voitool";
+        return mIsDebug ? "com.voilance.voitools" : "com.github.Voilance.voitools";
     }
 
     @Override
     public String version() {
-        return mIsDebug ? "0.6-debug" : "0.1";
+        return mIsDebug ? "0.6-debug" : "0.2";
     }
 }
