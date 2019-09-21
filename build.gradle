@@ -19,7 +19,7 @@ allprojects {
 ext.DEBUG = false
 subprojects {
     if (rootProject.ext.DEBUG) {
-        group = 'com.voilance.voitool'
+        group = 'com.voilance.voitools'
         version = '0.6-debug'
     } else {
         group = 'com.github.Voilance'
