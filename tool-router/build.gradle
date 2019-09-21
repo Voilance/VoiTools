@@ -11,5 +11,5 @@ dependencies {
 }
 
 if (rootProject.ext.DEBUG) {
-    apply from: '../gradle/local_nexus/plugin.gradle'
+    apply from: '../gradle/local_nexus/tool-router.gradle'
 }
