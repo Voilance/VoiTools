@@ -10,6 +10,6 @@ public final class ToolProjectInfo implements IProjectInfo {
 
     @Override
     public String version() {
-        return "0.2";
+        return "0.5";
     }
 }

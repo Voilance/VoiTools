@@ -64,17 +64,17 @@ public class ToolTransform extends Transform {
         }
     }
 
-    private void processDirInput(DirectoryInput input, TransformOutputProvider output) throws IOException {
-//        for (File file : ToolHelper.getClassFileFromDirectory(input.getFile())) {
-//            byte[] bytes = mToolTransformInvocation.onTransform(ToolHelper.fileToBytes(file));
-//            ToolHelper.bytesToFile(bytes, file);
-//        }
-        File targetFile = output.getContentLocation(input.getName(), input.getContentTypes(), input.getScopes(), Format.DIRECTORY);
-        FileUtils.copyDirectory(input.getFile(), targetFile);
-    }
-
     private void processJarInput(JarInput input, TransformOutputProvider output) throws IOException {
         File targetFile = output.getContentLocation(input.getName(), input.getContentTypes(), input.getScopes(), Format.JAR);
         FileUtils.copyFile(input.getFile(), targetFile);
+    }
+
+    private void processDirInput(DirectoryInput input, TransformOutputProvider output) throws IOException {
+        for (File file : ToolHelper.getClassFileFromDirectory(input.getFile())) {
+            byte[] bytes = mToolTransformInvocation.onTransform(ToolHelper.fileToBytes(file));
+            ToolHelper.bytesToFile(bytes, file);
+        }
+        File targetFile = output.getContentLocation(input.getName(), input.getContentTypes(), input.getScopes(), Format.DIRECTORY);
+        FileUtils.copyDirectory(input.getFile(), targetFile);
     }
 }

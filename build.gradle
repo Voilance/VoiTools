@@ -11,7 +11,7 @@ buildscript {
 ext {
     DEBUG = true
     GROUP = "com.voilance.voitool"
-    VERSION = "0.2"
+    VERSION = "0.5"
 }
 
 allprojects {

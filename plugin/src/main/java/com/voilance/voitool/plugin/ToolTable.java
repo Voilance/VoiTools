@@ -12,7 +12,9 @@ public final class ToolTable {
         "com.voilance.voitool.tool.RouterBuildGradleEditor"
     };
 
-    private static final String[] TRANSFORMER_TABLE = new String[] {};
+    private static final String[] TRANSFORMER_TABLE = new String[] {
+        "com.voilance.voitool.tool.RouterTransformer"
+    };
 
 
     public static List<IBuildGradleEditor> getBuildGradleEditors() {
