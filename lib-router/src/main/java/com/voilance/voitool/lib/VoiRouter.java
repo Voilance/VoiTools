@@ -29,10 +29,8 @@ public final class VoiRouter {
         }
     }
 
-
-    // Test
-    public static Map<String, String> getRouteMap() {
-        return mRouteMap;
+    public static boolean isInit() {
+        return mIsInit;
     }
 
     public static void registerRoute(String route, String path) {

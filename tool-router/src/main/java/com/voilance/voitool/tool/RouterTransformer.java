@@ -17,14 +17,10 @@ import java.util.Map;
 public class RouterTransformer implements ITransformer {
 
     @Override
-    public void onTransformStart() {
-        System.out.println("RouterTransformer is ready!");
-    }
+    public void onTransformStart() { }
 
     @Override
-    public void onTransformEnd() {
-        System.out.println("RouterTransformer is finished!");
-    }
+    public void onTransformEnd() {}
 
 
     private static final Map<String, String> ROUTE_MAP = new HashMap<>();

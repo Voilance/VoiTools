@@ -5,13 +5,8 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.0'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
     }
-}
-
-ext {
-    DEBUG = true
-    GROUP = "com.voilance.voitool"
-    VERSION = "0.25"
 }
 
 allprojects {
@@ -19,7 +14,15 @@ allprojects {
         google()
         jcenter()
     }
+}
 
-    group = rootProject.ext.GROUP
-    version = rootProject.ext.VERSION
+ext.DEBUG = false
+subprojects {
+    if (rootProject.ext.DEBUG) {
+        group = 'com.voilance.voitool'
+        version = '0.6-debug'
+    } else {
+        group = 'com.github.Voilance'
+        apply plugin: 'com.github.dcendents.android-maven'
+    }
 }

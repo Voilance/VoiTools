@@ -84,7 +84,6 @@ public class ToolTransform extends Transform {
     }
 
     private void processJarInput(JarInput input, TransformOutputProvider output) throws IOException {
-        System.out.println("JarInput: " + input.getName());
         String jarName = input.getName().replace(".jar", "");
         String md5Name = DigestUtils.md5Hex(input.getFile().getAbsolutePath());
         JarFile jarFile = new JarFile(input.getFile());
