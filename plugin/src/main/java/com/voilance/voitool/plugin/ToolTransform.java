@@ -12,11 +12,21 @@ import com.android.build.api.transform.TransformOutputProvider;
 import com.android.build.gradle.internal.pipeline.TransformManager;
 import com.android.utils.FileUtils;
 
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.IOUtils;
+
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Set;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.jar.JarOutputStream;
+import java.util.zip.ZipEntry;
 
 public class ToolTransform extends Transform {
 
@@ -74,8 +84,35 @@ public class ToolTransform extends Transform {
     }
 
     private void processJarInput(JarInput input, TransformOutputProvider output) throws IOException {
-        File targetFile = output.getContentLocation(input.getName(), input.getContentTypes(), input.getScopes(), Format.JAR);
-        FileUtils.copyFile(input.getFile(), targetFile);
+        System.out.println("JarInput: " + input.getName());
+        String jarName = input.getName().replace(".jar", "");
+        String md5Name = DigestUtils.md5Hex(input.getFile().getAbsolutePath());
+        JarFile jarFile = new JarFile(input.getFile());
+        Enumeration<JarEntry> enumeration = jarFile.entries();
+        File tempFile = new File(input.getFile().getParent() + File.separator + "temp_classes.jar");
+        if (tempFile.exists()) {
+            tempFile.delete();
+        }
+
+        JarOutputStream jos = new JarOutputStream(new FileOutputStream(tempFile));
+        while (enumeration.hasMoreElements()) {
+            JarEntry jarEntry = enumeration.nextElement();
+            ZipEntry zipEntry = new ZipEntry(jarEntry.getName());
+            InputStream is = jarFile.getInputStream(jarEntry);
+            jos.putNextEntry(zipEntry);
+            byte[] bytes = IOUtils.toByteArray(is);
+            if (jarEntry.getName().endsWith(".class")) {
+                bytes = mToolTransformInvocation.onTransform(bytes);
+            }
+            jos.write(bytes);
+            jos.closeEntry();
+            is.close();
+        }
+        jos.close();
+        jarFile.close();
+
+        File targetFile = output.getContentLocation(jarName + md5Name, input.getContentTypes(), input.getScopes(), Format.JAR);
+        FileUtils.copyFile(tempFile, targetFile);
     }
 
     private void processDirInput(DirectoryInput input, TransformOutputProvider output, boolean isLast) throws IOException {
