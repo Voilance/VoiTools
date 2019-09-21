@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 
 import java.io.Serializable;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,6 +16,18 @@ public final class VoiRouter {
 
     private static boolean mIsInit = false;
     private static Map<String, String> mRouteMap = new HashMap<>();
+
+    private static final String ROUTE_TABLE_CLASS = "com.voilance.voitool.lib.VoiRouteTable";
+    static {
+        try {
+            Class<?> clas = Class.forName(ROUTE_TABLE_CLASS);
+            Method method = clas.getMethod("init", Map.class);
+            method.invoke(null, mRouteMap);
+            mIsInit = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 
     // Test

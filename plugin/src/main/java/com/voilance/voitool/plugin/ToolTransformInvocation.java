@@ -71,4 +71,10 @@ public class ToolTransformInvocation implements TransformInvocation, ITransformL
         }
         return bytes;
     }
+
+    public void onLastTransform(String dirPath) {
+        for (ITransformer transformer : mTransformerList) {
+            transformer.lastTransform(dirPath);
+        }
+    }
 }

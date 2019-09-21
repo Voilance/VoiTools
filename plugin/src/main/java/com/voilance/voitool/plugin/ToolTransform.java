@@ -14,6 +14,8 @@ import com.android.utils.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class ToolTransform extends Transform {
@@ -54,13 +56,20 @@ public class ToolTransform extends Transform {
         if (output != null) {
             output.deleteAll();
         }
+
+        List<JarInput> jarInputList = new ArrayList<>();
+        List<DirectoryInput> dirInputList = new ArrayList<>();
         for (TransformInput transformInput : mToolTransformInvocation.getInputs()) {
-            for (JarInput jarInput : transformInput.getJarInputs()) {
-                processJarInput(jarInput, output);
-            }
-            for (DirectoryInput dirInput : transformInput.getDirectoryInputs()) {
-                processDirInput(dirInput, output);
-            }
+            jarInputList.addAll(transformInput.getJarInputs());
+            dirInputList.addAll(transformInput.getDirectoryInputs());
+        }
+
+        for (JarInput jarInput : jarInputList) {
+            processJarInput(jarInput, output);
+        }
+        int dirCot = 0;
+        for (DirectoryInput dirInput : dirInputList) {
+            processDirInput(dirInput, output, (dirCot += 1) == dirInputList.size());
         }
     }
 
@@ -69,10 +78,13 @@ public class ToolTransform extends Transform {
         FileUtils.copyFile(input.getFile(), targetFile);
     }
 
-    private void processDirInput(DirectoryInput input, TransformOutputProvider output) throws IOException {
+    private void processDirInput(DirectoryInput input, TransformOutputProvider output, boolean isLast) throws IOException {
         for (File file : ToolHelper.getClassFileFromDirectory(input.getFile())) {
             byte[] bytes = mToolTransformInvocation.onTransform(ToolHelper.fileToBytes(file));
             ToolHelper.bytesToFile(bytes, file);
+        }
+        if (isLast) {
+            mToolTransformInvocation.onLastTransform(input.getFile().getPath());
         }
         File targetFile = output.getContentLocation(input.getName(), input.getContentTypes(), input.getScopes(), Format.DIRECTORY);
         FileUtils.copyDirectory(input.getFile(), targetFile);
