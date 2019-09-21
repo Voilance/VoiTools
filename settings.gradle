@@ -1,3 +1,6 @@
 include ':plugin'
+include ':tool-base'
+include ':lib-router'
+include ':tool-router'
 
 rootProject.name='VoiTools'

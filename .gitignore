@@ -13,4 +13,6 @@
 .externalNativeBuild
 .cxx
 .idea
+
 */build
+/gradle/local_nexus
