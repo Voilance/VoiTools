@@ -16,3 +16,11 @@
 
 */build
 /gradle/local_nexus
+
+#VS code
+.project
+.settings
+*/.classpath
+*/.project
+*/.settings
+*/bin
