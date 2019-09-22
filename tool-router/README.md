@@ -15,8 +15,8 @@ classpath "com.github.Voilance.voitools:tool-router:$voitools_version"
 2. 在需要支持路由的 `Activity` 添加注解
 ```java
 // 注解中的值需唯一，同值路由会覆盖
-@VoiRoute("MainActivity")
-public class MainActivity extends Activity {
+@VoiRoute("TargetActivity")
+public class TargetActivity extends Activity {
     ...
 }
 ```
