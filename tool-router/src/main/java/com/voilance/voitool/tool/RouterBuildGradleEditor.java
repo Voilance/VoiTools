@@ -2,7 +2,7 @@ package com.voilance.voitool.tool;
 
 import org.gradle.api.Project;
 
-public class RouterBuildGradleEditor implements IBuildGradleEditor {
+public final class RouterBuildGradleEditor implements IBuildGradleEditor {
 
     @Override
     public void edit(Project project, IProjectInfo info) {

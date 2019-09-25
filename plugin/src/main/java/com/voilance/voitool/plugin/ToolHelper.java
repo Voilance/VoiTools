@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class ToolHelper {
+    private ToolHelper() {}
 
     public static List<File> getClassFileFromDirectory(File dir) {
         List<File> list = new ArrayList<>();

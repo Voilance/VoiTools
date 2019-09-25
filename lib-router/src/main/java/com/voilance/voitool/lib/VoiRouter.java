@@ -14,10 +14,25 @@ import java.util.Map;
 
 public final class VoiRouter {
 
+    /**
+     * 路由表初始化标识
+     */
     private static boolean mIsInit = false;
+    /**
+     * 路由表：route -> path
+     * eg: "MainActivity" -> "com.example.demo.MainActivity"
+     */
     private static Map<String, String> mRouteMap = new HashMap<>();
 
+    /**
+     * VoiRouteTable.class
+     * 编译期动态生成的类，记录了所有使用了@VoiRoute注解的类。
+     */
     private static final String ROUTE_TABLE_CLASS = "com.voilance.voitool.lib.VoiRouteTable";
+
+    /**
+     * 利用VoiRouteTable的init(Map<String, String>)方法，初始化路由表
+     */
     static {
         try {
             Class<?> clas = Class.forName(ROUTE_TABLE_CLASS);
@@ -29,10 +44,16 @@ public final class VoiRouter {
         }
     }
 
+    /**
+     * 路由表是否已经初始化
+     */
     public static boolean isInit() {
         return mIsInit;
     }
 
+    /**
+     * 注册路由，出现同值时会覆盖旧值。
+     */
     public static void registerRoute(String route, String path) {
         if (route == null ||
             path == null ||
@@ -43,18 +64,34 @@ public final class VoiRouter {
         mRouteMap.put(route, path);
     }
 
+    /**
+     * 判断路由表中是否存在某路由
+     * @param route
+     */
     public static boolean hasRoute(String route) {
         return route != null && mRouteMap.containsKey(route);
     }
 
+    /**
+     * 判断路由表中是否存在某路径
+     * @param path
+     */
     public static boolean hasPath(String path) {
         return path != null && mRouteMap.containsValue(path);
     }
 
+    /**
+     * 利用路由名获取对应的路径
+     * @param route
+     */
     public static String getPath(String route) {
         return hasRoute(route) ? mRouteMap.get(route) : "";
     }
 
+    /**
+     * 根据路径获取对应的路由名
+     * @param path
+     */
     public static String getRoute(String path) {
         if (hasPath(path)) {
             for (Map.Entry<String, String> entry : mRouteMap.entrySet()) {
@@ -95,6 +132,11 @@ public final class VoiRouter {
 
     public VoiRouter requestCode(int code) {
         mRequestCode = code;
+        return this;
+    }
+
+    public VoiRouter finish() {
+        mIsFinish = true;
         return this;
     }
 

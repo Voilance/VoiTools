@@ -11,7 +11,7 @@ import com.voilance.voitool.tool.ITransformer;
 import java.util.Collection;
 import java.util.List;
 
-public class ToolTransformInvocation implements TransformInvocation, ITransformListener {
+public final class ToolTransformInvocation implements TransformInvocation, ITransformListener {
 
     private TransformInvocation mTransformInvocation;
     private List<ITransformer> mTransformerList;

@@ -7,13 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class ToolTable {
+    private ToolTable() {}
 
     private static final String[] BUILD_GRADLE_EDITOR_TABLE = new String[] {
-        "com.voilance.voitool.tool.RouterBuildGradleEditor"
+        "com.voilance.voitool.tool.RouterBuildGradleEditor",
+        "com.voilance.voitool.tool.TrackerBuildGradleEditor"
     };
 
     private static final String[] TRANSFORMER_TABLE = new String[] {
-        "com.voilance.voitool.tool.RouterTransformer"
+        "com.voilance.voitool.tool.RouterTransformer",
+        "com.voilance.voitool.tool.TrackerTransformer"
     };
 
 

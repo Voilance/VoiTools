@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RouterTransformer implements ITransformer {
+public final class RouterTransformer implements ITransformer {
 
     @Override
     public void onTransformStart() { }
@@ -22,10 +22,16 @@ public class RouterTransformer implements ITransformer {
     @Override
     public void onTransformEnd() {}
 
-
+    /**
+     * 记录路由表: route -> path
+     * eg: "MainActivity" -> "com.example.demo.MainActivity"
+     */
     private static final Map<String, String> ROUTE_MAP = new HashMap<>();
     @Override
     public byte[] transform(byte[] bytes) {
+        // 扫描类信息，如果该类使用了@VoiRoute注解，则记录进路由表
+        // TODO 判断使用注解的类是否是Context实例，是则记录，否则不记录
+
         if (bytes == null) {
             return new byte[0];
         }
@@ -53,6 +59,10 @@ public class RouterTransformer implements ITransformer {
 
     @Override
     public void lastTransform(String dirPath) {
+        // 动态生成类文件：com.voilance.voitool.lib.VoiRouteTable.class，
+        // 将记录的路由信息写进一个init()方法中，
+        // 在运行期加载VoiRouter.class的时候调用该init()方法初始化路由表。
+
         ClassWriter cw = new ClassWriter(0);
         MethodVisitor mv;
 

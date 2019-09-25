@@ -1,0 +1,17 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.2"
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 29
+    }
+
+    packageBuildConfig(false)
+}
+
+if (rootProject.ext.DEBUG) {
+    apply from: '../gradle/local_nexus/lib-tracker.gradle'
+}
