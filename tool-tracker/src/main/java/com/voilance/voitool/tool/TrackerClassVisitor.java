@@ -15,10 +15,7 @@ final class TrackerClassVisitor extends ClassVisitor {
     @Override
     public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
         super.visit(version, access, name, signature, superName, interfaces);
-        className = name;
-        if (name.equals("com/voilance/voitool/lib/VoiTracker")) {
-            visitEnd();
-        }
+        className = name + superName;
     }
 
     @Override

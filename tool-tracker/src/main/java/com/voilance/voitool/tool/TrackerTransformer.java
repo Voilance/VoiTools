@@ -20,6 +20,10 @@ public final class TrackerTransformer implements ITransformer {
         }
 
         ClassReader cr = new ClassReader(bytes);
+        if (cr.getClassName().equals("com/voilance/voitool/lib/VoiTracker")) {
+            System.out.println("This is Voitracker and not deal with it");
+            return bytes;
+        }
         ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_MAXS);
         cr.accept(new TrackerClassVisitor(cw), ClassReader.EXPAND_FRAMES);
         return cw.toByteArray();

@@ -16,6 +16,6 @@ public final class ToolProjectInfo implements IProjectInfo {
 
     @Override
     public String version() {
-        return mIsDebug ? "0.13-debug" : "0.2";
+        return mIsDebug ? "0.16-debug" : "0.2";
     }
 }

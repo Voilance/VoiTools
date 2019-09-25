@@ -84,60 +84,35 @@ public final class ToolTransform extends Transform {
     }
 
     private void processJarInput(JarInput input, TransformOutputProvider output) throws IOException {
-        System.out.println("processJarInput");
         String jarName = input.getName().replace(".jar", "");
-        System.out.println("jarName");
         String md5Name = DigestUtils.md5Hex(input.getFile().getAbsolutePath());
-        System.out.println("md5Name");
         JarFile jarFile = new JarFile(input.getFile());
-        System.out.println("jarFile");
         Enumeration<JarEntry> enumeration = jarFile.entries();
-        System.out.println("enumeration");
         File tempFile = new File(input.getFile().getParent() + File.separator + "temp_classes.jar");
-        System.out.println("tempFile");
         if (tempFile.exists()) {
-            System.out.println("tempFile exists and delete");
             tempFile.delete();
         }
 
         JarOutputStream jos = new JarOutputStream(new FileOutputStream(tempFile));
-        System.out.println("jos");
         while (enumeration.hasMoreElements()) {
-            System.out.println("hasMoreDelements");
             JarEntry jarEntry = enumeration.nextElement();
-            System.out.println("jarEntry");
             ZipEntry zipEntry = new ZipEntry(jarEntry.getName());
-            System.out.println("zipEntry");
             InputStream is = jarFile.getInputStream(jarEntry);
-            System.out.println("is");
             jos.putNextEntry(zipEntry);
-            System.out.println("putNextEntry");
             byte[] bytes = IOUtils.toByteArray(is);
-            System.out.println("bytes");
             if (jarEntry.getName().endsWith(".class")) {
-                System.out.println(".class file and onTransform");
                 bytes = mToolTransformInvocation.onTransform(bytes);
             }
             jos.write(bytes);
-            System.out.println("jos.write");
             jos.closeEntry();
-            System.out.println("jos.closeEntry");
             is.close();
-            System.out.println("is.cloase");
         }
         jos.close();
-        System.out.println("jos.close");
         jarFile.close();
-        System.out.println("jarFile.close");
 
         File targetFile = output.getContentLocation(jarName + md5Name, input.getContentTypes(), input.getScopes(), Format.JAR);
-        System.out.println("targetFile");
         FileUtils.copyFile(tempFile, targetFile);
-        System.out.println("copyFile");
         tempFile.delete();
-        System.out.println("tempFile.delete");
-//        File targetFile = output.getContentLocation(input.getName(), input.getContentTypes(), input.getScopes(), Format.JAR);
-//        FileUtils.copyFile(input.getFile(), targetFile);
     }
 
     private void processDirInput(DirectoryInput input, TransformOutputProvider output, boolean isLast) throws IOException {
