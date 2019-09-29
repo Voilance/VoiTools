@@ -1,4 +1,4 @@
-include ':plugin'
+include ':plugin', ':lib-http', ':tool-http'
 include ':tool-base'
 include ':lib-router'
 include ':tool-router'
