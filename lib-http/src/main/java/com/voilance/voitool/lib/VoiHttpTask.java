@@ -1,14 +1,33 @@
 package com.voilance.voitool.lib;
 
+import okhttp3.Call;
+import okhttp3.HttpUrl;
+import okhttp3.MediaType;
+import okhttp3.Request;
+
 public abstract class VoiHttpTask {
 
-    protected String mUrl;
+    protected VoiHttpClient mClient;
+    protected Request.Builder mRequestBuilder;
+    protected Call mCall;
 
-    protected VoiHttpTask(String url) {
-        mUrl = url;
+    protected static final MediaType DEFAULT_MEDIA_TYPE = MediaType.parse("application/json;charset=UTF-8");
+
+    public VoiHttpTask(HttpUrl url) {
+        mRequestBuilder = new Request.Builder().url(url);
     }
 
-    protected void syncExecute() {}
+    public VoiHttpTask(String url) {
+        mRequestBuilder = new Request.Builder().url(url);
+    }
 
-    protected void asyncExecute() {}
+    public Call execute() {
+        mCall = mClient.mInstance.newCall(mRequestBuilder.build());
+//        mCall.execute();
+        return mCall;
+    }
+
+    public void syncExecute() {}
+
+    public void asyncExecute() {}
 }

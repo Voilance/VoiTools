@@ -12,10 +12,10 @@
 /captures
 .externalNativeBuild
 .cxx
-.idea
+.idea/
 
 */build
-/gradle/local_nexus
+/gradle/local_nexus/
 
 #VS code
 .project

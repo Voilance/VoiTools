@@ -16,7 +16,6 @@ public final class ToolPlugin implements Plugin<Project> {
             project.getExtensions()
                 .getByType(AppExtension.class)
                 .registerTransform(new ToolTransform());
-
             project.afterEvaluate(p -> {
                 ToolProjectInfo projectInfo = new ToolProjectInfo(true);
                 List<IBuildGradleEditor> editorList = ToolTable.getBuildGradleEditors();
@@ -31,7 +30,6 @@ public final class ToolPlugin implements Plugin<Project> {
                     }
                 }
             });
-
         }
     }
 }
