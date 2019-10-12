@@ -129,8 +129,24 @@ public final class VoiHttpUrl {
         return mUrl.encodedFragment();
     }
 
+    public Builder newBuilder() {
+        return new Builder(mUrl.newBuilder());
+    }
+
+    public Builder newBuilder(String link) {
+        return new Builder(mUrl.newBuilder(link));
+    }
+
     public static class Builder {
-        private HttpUrl.Builder mBuilder = new HttpUrl.Builder();
+        private HttpUrl.Builder mBuilder;
+
+        public Builder() {
+            mBuilder = new HttpUrl.Builder();
+        }
+
+        Builder(HttpUrl.Builder builder) {
+            mBuilder = builder != null ? builder : new HttpUrl.Builder();
+        }
 
         public Builder protocol(String protocol) {
             mBuilder.scheme(protocol);
