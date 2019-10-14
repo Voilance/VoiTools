@@ -10,12 +10,16 @@ import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.Response;
+import okio.Timeout;
 
 public abstract class VoiHttpTask {
 
     protected VoiHttpClient mClient;
+    protected VoiHttpCallback mCallback;
     protected Request.Builder mRequestBuilder;
+    protected Request mRequest;
     protected Call mCall;
+    protected boolean mIsExecuted = false;
 
     protected static final MediaType DEFAULT_MEDIA_TYPE = MediaType.parse("application/json;charset=UTF-8");
 
@@ -27,20 +31,23 @@ public abstract class VoiHttpTask {
         mRequestBuilder = new Request.Builder().url(url);
     }
 
-    public Call execute() {
-        mCall = mClient.mInstance.newCall(mRequestBuilder.build());
-//        mCall.execute();
-        mCall.enqueue(new Callback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+    public String getMethod() {
+        return mRequest.method();
+    }
 
-            }
+    public VoiHttpTask addHeader(String name, String value) {
+        mRequestBuilder.addHeader(name, value);
+        return this;
+    }
 
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+    public VoiHttpTask enqueue(VoiHttpCallback callback) {
+        if (callback != null) {
+            mCallback = callback;
+        }
+        return this;
+    }
 
-            }
-        });
-        return mCall;
+    public VoiHttpTask execute() {
+        return this;
     }
 }

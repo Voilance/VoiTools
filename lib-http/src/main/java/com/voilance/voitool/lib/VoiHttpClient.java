@@ -69,6 +69,7 @@ public final class VoiHttpClient {
         public Builder cookie() {
             mBuilder.cookieJar(new CookieJar() {
                 private Map<String, List<Cookie>> mCookieMap = new HashMap<>();
+
                 @Override
                 public void saveFromResponse(@NotNull HttpUrl httpUrl, @NotNull List<Cookie> list) {
                     if (httpUrl != null && list != null) {
