@@ -20,7 +20,7 @@ ext.DEBUG = true
 subprojects {
     if (rootProject.ext.DEBUG) {
         group = 'com.voilance.voitools'
-        version = '0.1-debug'
+        version = '0.5-debug'
     } else {
         group = 'com.github.Voilance'
         apply plugin: 'com.github.dcendents.android-maven'

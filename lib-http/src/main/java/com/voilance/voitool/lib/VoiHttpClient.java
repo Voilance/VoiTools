@@ -2,97 +2,54 @@ package com.voilance.voitool.lib;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
-import okhttp3.Cookie;
-import okhttp3.CookieJar;
-import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 
 public final class VoiHttpClient {
 
-    String mName;
-    volatile OkHttpClient mInstance;
-
-    public static final String UNKNOWN_CLIENT = "unknown_client";
-
-    public VoiHttpClient(String name) {
-        mName = name != null ? name : UNKNOWN_CLIENT;
-        mInstance = new OkHttpClient();
+    private static volatile Map<String, VoiHttpClient> CLIENT_MAP = new HashMap<>();
+    public static final String DEFAULT_CLIENT_TAG = "default_client";
+    static {
+        CLIENT_MAP.put(DEFAULT_CLIENT_TAG, new VoiHttpClient(DEFAULT_CLIENT_TAG));
     }
 
-    public VoiHttpClient(String name, OkHttpClient client) {
-        mName = name != null ? name : UNKNOWN_CLIENT;
-        mInstance = client != null ? client : new OkHttpClient();
-    }
-
-    public String getClientName() {
-        return mName;
-    }
-
-    private VoiHttpClient getInstance() {
-        if (mInstance == null) {
-            synchronized (this) {
-                mInstance = new OkHttpClient();
+    public static VoiHttpClient getClient(@NotNull String tag) {
+        if (tag != null) {
+            if (CLIENT_MAP.get(tag) != null) {
+                synchronized (CLIENT_MAP) {
+                    if (CLIENT_MAP.get(tag) != null) {
+                        return CLIENT_MAP.get(tag);
+                    }
+                }
             }
         }
-        return this;
+        return CLIENT_MAP.get(DEFAULT_CLIENT_TAG);
     }
 
-    public static class Builder {
-        private String mName;
-        private OkHttpClient.Builder mBuilder = new OkHttpClient.Builder();
+    private String mTag;
+    private volatile OkHttpClient mClient;
 
-        public Builder(String name) {
-            mName = name != null ? name : UNKNOWN_CLIENT;
+    public VoiHttpClient(@NotNull String tag, @NotNull OkHttpClient client) {
+        if (tag == null || client == null) {
+            throw new NullPointerException("parameter should not be null!");
         }
-
-        public Builder setConnectTimeout(long mills) {
-            mBuilder.connectTimeout(mills, TimeUnit.MILLISECONDS);
-            return this;
-        }
-
-        public Builder setReadTimeout(long mills) {
-            mBuilder.readTimeout(mills, TimeUnit.MILLISECONDS);
-            return this;
-        }
-
-        public Builder setWriteTimeout(long mills) {
-            mBuilder.writeTimeout(mills, TimeUnit.MILLISECONDS);
-            return this;
-        }
-
-        public Builder cookie() {
-            mBuilder.cookieJar(new CookieJar() {
-                private Map<String, List<Cookie>> mCookieMap = new HashMap<>();
-
-                @Override
-                public void saveFromResponse(@NotNull HttpUrl httpUrl, @NotNull List<Cookie> list) {
-                    if (httpUrl != null && list != null) {
-                        mCookieMap.put(httpUrl.host(), list);
-                    }
+        if (!CLIENT_MAP.containsKey(tag)) {
+            synchronized (CLIENT_MAP) {
+                if (!CLIENT_MAP.containsKey(tag)) {
+                    mTag = tag;
+                    mClient = client;
+                    CLIENT_MAP.put(tag, this);
+                    return;
                 }
-
-                @NotNull
-                @Override
-                public List<Cookie> loadForRequest(@NotNull HttpUrl httpUrl) {
-                    if (httpUrl != null) {
-                        if (mCookieMap.get(httpUrl.host()) != null) {
-                            return mCookieMap.get(httpUrl.host());
-                        }
-                    }
-                    return new ArrayList<>();
-                }
-            });
-            return this;
+            }
         }
-
-        public VoiHttpClient build() {
-            return new VoiHttpClient(mName, mBuilder.build());
-        }
+        throw new IllegalArgumentException("parameter tag already exist!");
     }
+
+    public VoiHttpClient(String tag) {
+        this(tag, new OkHttpClient());
+    }
+
 }
